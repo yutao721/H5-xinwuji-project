@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <script type="text/javascript">
+    // var vConsole = new VConsole();
+    let sUserAgent = navigator.userAgent.toLowerCase()
+    let bIsAndroid = sUserAgent.match(/android/i) == 'android'
+    let bIsIphoneOs = sUserAgent.match(/iphone/i) == 'iphone'
+    let TOKEN = null, appVersion = null, uuid = null, phoneModel = null, clientId = null, userId = null
+
+    // 安卓
+    if (bIsAndroid && window.__wxjs_environment !== 'miniprogram') {
+      TOKEN = window.native ? window.native.getToken() : ''
+      appVersion = window.native ? window.native.getAppVersionName() : ''
+      uuid = window.native ? window.native.getUUId() : ''
+      clientId = window.native ? window.native.getClientId() : ''
+      userId = window.native ? window.native.getUserId() : ''
+
+      localStorage.setItem('TOKEN', TOKEN)
+      localStorage.setItem('appVersion', appVersion)
+      localStorage.setItem('uuid', uuid)
+      localStorage.setItem('clientId', clientId)
+      localStorage.setItem('userId', userId)
+
+      console.log(TOKEN, 'TOKEN')
+      console.log(appVersion, 'appVersion')
+      console.log(uuid, 'uuid')
+      console.log(clientId, 'clientId')
+      console.log(userId, 'userId')
+    }
+
+
+    // ios
+    if (bIsIphoneOs && window.__wxjs_environment !== 'miniprogram') {
+      if (window.webkit && window.webkit.messageHandlers) {
+        window.webkit.messageHandlers.getToken.postMessage(null)
+        window.webkit.messageHandlers.getAppVersionName.postMessage(null)
+        window.webkit.messageHandlers.getUUId.postMessage(null)
+        window.webkit.messageHandlers.getClientId.postMessage(null)
+        window.webkit.messageHandlers.getUserId.postMessage(null)
+      }
+
+      function getToken(data) {
+        localStorage.setItem('TOKEN', data)
+        console.log(localStorage.getItem('TOKEN'), 'TOKEN1')
+      }
+
+      function getAppVersionName(data) {
+        localStorage.setItem('appVersion', data)
+        console.log(localStorage.getItem('appVersion'), 'appVersion')
+      }
+
+      function getUUId(data) {
+        localStorage.setItem('uuid', data)
+        console.log(localStorage.getItem('uuid'), 'uuid')
+      }
+
+      function getClientId(data) {
+        localStorage.setItem('clientId', data)
+        console.log(localStorage.getItem('clientId'), 'clientId')
+      }
+
+      function getUserId(data) {
+        localStorage.setItem('userId', data)
+        console.log(localStorage.getItem('userId'), 'userId')
+      }
+    }
+
+
+  </script>
+  <!-- <% for (var i in
+    htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.css) { %>
+    <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style" />
+    <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
+  <% } %> -->
+  <title><%= webpackConfig.name %></title>
+</head>
+<body>
+<div id="app"></div>
+<!-- 使用CDN加速的JS文件，配置在vue.config.js下 -->
+<% for (var i in
+htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.js) { %>
+<% } %>
+<!-- built files will be auto injected -->
+</body>
+</html>
